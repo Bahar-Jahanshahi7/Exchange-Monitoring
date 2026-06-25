@@ -1,0 +1,29 @@
+name: Crypto Twitter Monitor Bot
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # اجرا هر 5 دقیقه
+  workflow_dispatch: # امکان اجرای دستی
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: pip install python-telegram-bot==20.8
+
+    - name: Run Bot Script
+      env:
+        # این بخش بسیار مهم است؛ سکرت‌های گیت‌هاب را به متغیرهای پایتون متصل می‌کند
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python bot.py

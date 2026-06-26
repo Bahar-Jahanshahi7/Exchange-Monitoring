@@ -9,7 +9,7 @@ from telegram import Bot
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
-TXT_FILE = "sent_exchange_links.txt" # یک فایل تاریخچه مجزا برای صرافی‌ها
+TXT_FILE = "sent_exchange_links.txt"
 
 # کلمات کلیدی مخصوص لیستینگ صرافی‌ها
 KEYWORDS = ["list", "listing", "added", "support", "launchpool", "launchpad", "new token"]
@@ -34,9 +34,7 @@ async def main_pipeline():
     print("Starting Safe Exchange Monitor via Google Wire (Anti-Block)...")
     bot = Bot(token=TELEGRAM_BOT_TOKEN)
     
-    # سرور سرچ گوگل برای پیدا کردن آخرین اطلاعیه‌های صرافی‌ها در کل وب
-    query = "site:binance.com/en/support/announcement OR site:bybit.com OR site:kucoin.com"
-    # برای سادگی و پوشش همه صرافی‌ها، یک سرچ هوشمند کریپتویی در گوگل می‌زنیم:
+    # سرور سرچ گوگل برای پیدا کردن آخرین اطلاعیه‌های صرافی‌ها
     encoded_query = urllib.parse.quote("binance list OR bybit listing OR OKX announcement OR bitget listed")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-US&gl=US&ceid=US:en"
     

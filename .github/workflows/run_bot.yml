@@ -1,12 +1,12 @@
-name: Crypto Twitter Monitor Bot
+name: Crypto Monitor Pipeline
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # اجرا هر 5 دقیقه
-  workflow_dispatch: # امکان اجرای دستی
+    - cron: '*/5 * * * *' # اجرای خودکار هر 5 دقیقه یک‌بار
+  workflow_dispatch: # امکان اجرای دستی از تب Actions
 
 jobs:
-  run-bot:
+  run-crypto-bots:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +21,22 @@ jobs:
     - name: Install Dependencies
       run: pip install python-telegram-bot==20.8
 
-    - name: Run Bot Script
+    - name: Run Projects Bot
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python bot.py
+      run: python bot.py # اجرای ربات پروژه‌های بنیادی
 
-    # 🔑 مرحله جدید: ذخیره خودکار لینک‌های ارسال شده در گیت‌هاب برای جلوگیری از پیام تکراری
+    - name: Run Exchanges Bot
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: python exchange_bot.py # اجرای ربات لیستینگ صرافی‌ها
+
     - name: Commit and Push Changes
       run: |
         git config --global user.name "GitHub Action Bot"
         git config --global user.email "actions@github.com"
-        git add sent_links.txt
-        # این خط بررسی می‌کند اگر تغییری رخ داده باشد، فایل را کامیت و پوش کند تا ارور ندهد
-        git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Update sent_links.txt [skip ci]" && git push)
+        # اضافه کردن هر دو فایل تاریخچه برای ذخیره‌سازی
+        git add sent_links.txt sent_exchange_links.txt
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Update monitor logs [skip ci]" && git push)

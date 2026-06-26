@@ -11,7 +11,6 @@ TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
 TXT_FILE = "sent_exchange_links.txt"
 
-# کلمات کلیدی لیستینگ و اطلاعیه‌های مهم
 KEYWORDS = ["list", "listing", "added", "support", "launchpool", "launchpad", "new token", "announcement", "delist"]
 EXCHANGES = ["Binance", "Bybit", "KuCoin", "MEXC", "Gate", "Bitget", "OKX", "BingX", "Kraken", "Coinbase"]
 
@@ -29,7 +28,7 @@ def save_link(link):
     SENT_LINKS.add(link)
 
 async def main_pipeline():
-    print("Starting Multi-Channel 6-Hour Exchange Monitor via Google Wire...")
+    print("Starting Multi-Channel 6-Hour Exchange Monitor with Dates...")
     bot = Bot(token=TELEGRAM_BOT_TOKEN)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
 
@@ -37,7 +36,6 @@ async def main_pipeline():
         for exchange in EXCHANGES:
             print(f"🔍 Scanning last 6 hours news for {exchange}...")
             
-            # تغییر فیلتر زمانی به 6 ساعت اخیر (when:6h) برای پوشش تاخیرهای گیت‌هاب
             raw_query = f'"{exchange}" AND (list OR listing OR added OR launchpool OR announcement OR delist) when:6h'
             encoded_query = urllib.parse.quote(raw_query)
             rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-US&gl=US&ceid=US:en"
@@ -48,7 +46,7 @@ async def main_pipeline():
                     xml_data = response.read()
                 
                 root = ET.fromstring(xml_data)
-                items = root.findall('.//item')[:10] # بررسی تا 10 خبر اخیر برای هر صرافی
+                items = root.findall('.//item')[:10]
                 
                 for item in items:
                     link = item.find('link').text if item.find('link') is not None else ""
@@ -57,13 +55,20 @@ async def main_pipeline():
                     
                     title = item.find('title').text if item.find('title') is not None else ""
                     
+                    # استخراج تاریخ انتشار خبر از گوگل نیوز
+                    pub_date = item.find('pubDate').text if item.find('pubDate') is not None else "نامشخص"
+                    # تمیز کردن فرمت تاریخ (حذف بخش منطقه زمانی طولانی آخرش برای خوانایی بهتر)
+                    clean_date = pub_date.replace(" GMT", " UTC")
+                    
                     if any(kw.lower() in title.lower() for kw in KEYWORDS):
                         clean_title = title.split(' - ')[0] if ' - ' in title else title
                         safe_title = html.escape(clean_title)
                         
+                        # اضافه شدن بخش تاریخ به بدنه پیام
                         final_message = (
                             f"🚨 <b>اطلاعیه جدید صرافی ({exchange})</b>\n\n"
                             f"📝 <b>عنوان:</b>\n{safe_title}\n\n"
+                            f"📅 <b>تاریخ انتشار (UTC):</b>\n<code>{clean_date}</code>\n\n"
                             f"🔗 <a href='{link}'>مشاهده منبع خبر</a>"
                         )
                         
@@ -78,7 +83,7 @@ async def main_pipeline():
             except Exception as e:
                 print(f"⚠️ Skip {exchange} due to network timing: {e}")
             
-            await asyncio.sleep(2) # تاخیر برای رعایت قوانین گوگل
+            await asyncio.sleep(2)
 
 if __name__ == "__main__":
     asyncio.run(main_pipeline())

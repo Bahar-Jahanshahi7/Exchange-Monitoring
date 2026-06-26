@@ -23,7 +23,15 @@ jobs:
 
     - name: Run Bot Script
       env:
-        # این بخش بسیار مهم است؛ سکرت‌های گیت‌هاب را به متغیرهای پایتون متصل می‌کند
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: python bot.py
+
+    # 🔑 مرحله جدید: ذخیره خودکار لینک‌های ارسال شده در گیت‌هاب برای جلوگیری از پیام تکراری
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "GitHub Action Bot"
+        git config --global user.email "actions@github.com"
+        git add sent_links.txt
+        # این خط بررسی می‌کند اگر تغییری رخ داده باشد، فایل را کامیت و پوش کند تا ارور ندهد
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Update sent_links.txt [skip ci]" && git push)

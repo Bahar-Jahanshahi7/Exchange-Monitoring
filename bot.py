@@ -14,7 +14,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 
-DB_FILE = "sent_tweets_ai.txt"
+DB_FILE = "sent_exchange_links.txt"
 
 TWITTER_ACCOUNTS = [
     "binance",          # Binance

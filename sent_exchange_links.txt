@@ -132,3 +132,5 @@ http://x.com/krakenlistings/status/2086913884259299597#m
 http://x.com/binance/status/2086932222632657038#m
 http://x.com/okx/status/2086924804322410779#m
 http://x.com/krakenlistings/status/2086947289990664370#m
+http://x.com/binance/status/2086966001053167667#m
+http://x.com/kucoincom/status/2086965825726980405#m

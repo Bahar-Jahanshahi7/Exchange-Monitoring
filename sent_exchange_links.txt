@@ -780,3 +780,5 @@ http://x.com/Bybit_Official/status/2090378306562523242#m
 http://x.com/kucoincom/status/2090378316167717126#m
 http://x.com/coinbase/status/2090376001586946170#m
 http://x.com/coinbase/status/2090375939934814212#m
+http://x.com/binance/status/2090380033013764166#m
+http://x.com/kucoincom/status/2090388078909378882#m

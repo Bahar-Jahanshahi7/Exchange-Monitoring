@@ -2205,3 +2205,7 @@ http://x.com/kucoincom/status/2099543703027372053#m
 http://x.com/coinbase/status/2099577755381780817#m
 http://x.com/coinbase/status/2099552728024326394#m
 http://x.com/coinbase/status/2099552507416478030#m
+http://x.com/binance/status/2099649406223929676#m
+http://x.com/kucoincom/status/2099649401769611266#m
+http://x.com/okx/status/2099672299204977034#m
+http://x.com/BingXOfficial/status/2099654432719872135#m
